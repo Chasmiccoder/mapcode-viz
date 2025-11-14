@@ -2,7 +2,8 @@ name: Build Typst document
 
 on:
   push:
-    branches: [ main ]
+    tags:
+    - '*'
   workflow_dispatch: {}
 
 permissions:
@@ -32,5 +33,7 @@ jobs:
         run: echo "DATE=$(date +%Y-%m-%d-%H:%M)" >> $GITHUB_ENV
       - name: Release
         uses: ncipollo/release-action@v1
+        if: ${{ github.event_name != 'pull_request' }}
         with:
+          generateReleaseNotes: true
           artifacts: "*.pdf"
